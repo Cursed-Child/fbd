@@ -397,9 +397,9 @@ void checkSellingOpportunity(double _latestPrice)
             {
                //DebugBreak();
                _tmpMessage = " --- Sold " + 0.80*unitsBought + " @ " + _latestPrice;
-               _sl.buyOrder.unitsInHand = unitsBought - (0.80*unitsBought);
-               _sl.buyOrder.stopLoss = _sl.buyOrder.boughtAt;
+               _sl.buyOrder.unitsInHand = unitsBought - (0.80*unitsBought);               
                _sl.buyOrder.sellAt = _sl.buyOrder.boughtAt + (_sl.buyOrder.boughtAt - _sl.buyOrder.stopLoss);
+               _sl.buyOrder.stopLoss = _sl.buyOrder.boughtAt;
                _sl.buyOrder.message += _tmpMessage + "\n";
                _sl.buyOrder.message += "                                --- Left: " + _sl.buyOrder.unitsInHand + " units --- Will sell: " + _sl.buyOrder.sellAt + " --- Stop Loss: " + _sl.buyOrder.stopLoss;
                _sl.hasBuyOrder = 1;
