@@ -465,7 +465,7 @@ BuyOrder createBuyOrder(double latestPrice,int _relatedSigLowId, double perUnitP
    tmp.message  =_message;
    
    if (_message != "No Buy Orders")
-      tmp.timePlaced = _timeOrdered;
+      tmp.timePlaced = _timeOrdered + " " + tmp.message;
 
    return tmp;
 
