@@ -324,7 +324,7 @@ void updateSignificantLows(double tmpLatestPrice)
             tmp.upBreach = true;
             
             int randomOrderSize = GenerateRandomOrderSize(minLimit,maxLimit);
-            BuyOrder _buyOrder = createBuyOrder(tmpLatestPrice,tmp.sequenceSigLow,calculatePerUnitProfit(tmp.maxBreach,tmpLatestPrice,2),randomOrderSize,tmp.price,tmp.maxBreach,"active",randomOrderSize + " units @" + tmpLatestPrice);
+            BuyOrder _buyOrder = createBuyOrder(tmpLatestPrice,tmp.sequenceSigLow,calculatePerUnitProfit(tmp.maxBreach,tmpLatestPrice,2),randomOrderSize,tmp.price,tmp.maxBreach,"active",randomOrderSize + " units @" + tmpLatestPrice,GetET(TimeCurrent()));
             _buyOrder.message = _buyOrder.message + "  --- Stop Loss set at " + _buyOrder.stopLoss + "  --- Will sell @: " + _buyOrder.sellAt;
             tmp.buyOrder = _buyOrder;
             tmp.hasBuyOrder = 1;
@@ -399,7 +399,7 @@ void checkSellingOpportunity(double _latestPrice)
                _tmpMessage = " --- Sold " + 0.80*unitsBought + " @ " + _latestPrice;
                _sl.buyOrder.unitsInHand = unitsBought - (0.80*unitsBought);
                _sl.buyOrder.stopLoss = _sl.buyOrder.boughtAt;
-               _sl.buyOrder.sellAt = _sl.buyOrder.sellAt + 12;
+               _sl.buyOrder.sellAt = _sl.buyOrder.boughtAt + (_sl.buyOrder.boughtAt - _sl.buyOrder.stopLoss);
                _sl.buyOrder.message += _tmpMessage + "\n";
                _sl.buyOrder.message += "                                --- Left: " + _sl.buyOrder.unitsInHand + " units --- Will sell: " + _sl.buyOrder.sellAt + " --- Stop Loss: " + _sl.buyOrder.stopLoss;
                _sl.hasBuyOrder = 1;
@@ -445,7 +445,7 @@ void checkSellingOpportunity(double _latestPrice)
 //+---------------------------------------------------------------
 // Create Buy Order createBuyOrder(tmpLatestPrice,tmp.sequenceSigLow,10,300,tmp.price);
 //+---------------------------------------------------------------
-BuyOrder createBuyOrder(double latestPrice,int _relatedSigLowId, double perUnitProfit, int _unitsBought, double _relatedSigLowPrice,double _maxBreach, string _state, string _message)
+BuyOrder createBuyOrder(double latestPrice,int _relatedSigLowId, double perUnitProfit, int _unitsBought, double _relatedSigLowPrice,double _maxBreach, string _state, string _message, datetime _timeOrdered)
   {
 
    BuyOrder tmp;
@@ -463,6 +463,9 @@ BuyOrder createBuyOrder(double latestPrice,int _relatedSigLowId, double perUnitP
    tmp.state = _state; //active = just created, used = sold, inactive to show its an empty buy
    tmp.unitsInHand = _unitsBought; // total units in hand... 
    tmp.message  =_message;
+   
+   if (_message != "No Buy Orders")
+      tmp.timePlaced = _timeOrdered;
 
    return tmp;
 
@@ -527,7 +530,7 @@ SignificantLow constructSignificantLow(double tmpLowestPrice, double tmpLatestPr
    newSignificantLow.sequenceSigLow = sequenceSigLow;
    newSignificantLow.priceFoundAt = tmpLatestPrice;
    newSignificantLow.maxBreach = tmpLowestPrice;
-   newSignificantLow.buyOrder = createBuyOrder(0,newSignificantLow.sequenceSigLow,0,0,newSignificantLow.price,0,"inactive", "No Buy Orders");
+   newSignificantLow.buyOrder = createBuyOrder(0,newSignificantLow.sequenceSigLow,0,0,newSignificantLow.price,0,"inactive", "No Buy Orders", GetET(TimeCurrent()));
    sequenceSigLow = sequenceSigLow + 1;
    newSignificantLow.message = _message;
    newSignificantLow.hasBuyOrder = _hasBuyOrder;
