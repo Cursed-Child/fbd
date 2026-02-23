@@ -9,11 +9,16 @@ using System.IO;
 namespace cAlgo.Robots;
 
 
-//*********************************//
+//*********************************NOT ACTIVE V5 *******//
 // 30 % : Selling at PRICE PAID + GAP; Stop Loss at Sig Low
 // 40 %: Selling at PRICE PAID + (2 * GAP); Stop Loss is at PRICE PAID
 // 30 %  Selling at PRICE PAID + (3 * GAP); Stop Loss is at PRICE PAID + GAP (OTO)
+//********************************
 
+//*********************** ACTIVE v6 ********//
+// 30% at Stop Loss - 2
+// 40% at Stop Loss - 4
+// 30% At Stop loss = Max Breach
 
 #region Low Price 
 public class LowPrice
@@ -567,7 +572,7 @@ public class fbdv5 : Robot
                             _tempSigLowObject.Log = Environment.NewLine + $"Sig Low # {_tempSigLowObject.Id} breached downwards at {_currentServerTime} when ticker was {_currentTickPrice}";
                         }
 
-
+                        
 
                         continue;
                     }
